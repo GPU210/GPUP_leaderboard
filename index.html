@@ -1,16 +1,23 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>GPU Sorting Challenge – Leaderboard</title>
+  <meta charset="UTF-8">
+  <title>Assignment-2 Leaderboard</title>
   <link rel="stylesheet" href="style.css">
 </head>
 <body>
-  <main class="container">
-    <h1>Assignment-2 Leaderboard</h1>
-    <div id="leaderboard"></div>
-  </main>
+  <h1>Assignment-2 Leaderboard</h1>
+
+  <!-- File upload -->
+  <input type="file" id="fileInput" accept=".csv">
+  <button id="uploadBtn">Upload & Show</button>
+
+  <!-- Table -->
+  <table id="leaderboard">
+    <thead></thead>
+    <tbody></tbody>
+  </table>
+
   <script src="app.js"></script>
 </body>
 </html>
