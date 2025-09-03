@@ -8,10 +8,11 @@ document.getElementById("uploadBtn").addEventListener("click", () => {
   }
 
   Papa.parse(file, {
-    header: true,   // use first row as header
+    header: true,
     skipEmptyLines: true,
     complete: function(results) {
       displayCSV(results.meta.fields, results.data);
+      highlightChampion(results.data);
     }
   });
 });
@@ -28,8 +29,9 @@ function displayCSV(headers, data) {
     return;
   }
 
-  // Header row
+  // Add Rank column
   const headerRow = document.createElement("tr");
+  headerRow.appendChild(Object.assign(document.createElement("th"), { textContent: "Rank" }));
   headers.forEach(col => {
     const th = document.createElement("th");
     th.textContent = col.trim();
@@ -37,12 +39,25 @@ function displayCSV(headers, data) {
   });
   tableHead.appendChild(headerRow);
 
-  // Sort rows by Execution Time (ascending)
-  data.sort((a, b) => parseFloat(a["Execution Time (ms)"]) - parseFloat(b["Execution Time (ms)"]));
+  // Sort by Execution Time (asc), then Memory (asc)
+  data.sort((a, b) => {
+    const timeA = parseFloat(a["Execution Time (ms)"]) || Infinity;
+    const timeB = parseFloat(b["Execution Time (ms)"]) || Infinity;
+    if (timeA !== timeB) return timeA - timeB;
 
-  // Data rows
+    const memA = parseFloat(a["Peak Memory (MB)"]) || Infinity;
+    const memB = parseFloat(b["Peak Memory (MB)"]) || Infinity;
+    return memA - memB;
+  });
+
+  // Add rows
   data.forEach((rowObj, index) => {
     const row = document.createElement("tr");
+
+    // Rank column
+    const rankCell = document.createElement("td");
+    rankCell.textContent = index + 1;
+    row.appendChild(rankCell);
 
     headers.forEach(col => {
       const td = document.createElement("td");
@@ -50,11 +65,26 @@ function displayCSV(headers, data) {
       row.appendChild(td);
     });
 
-    // Highlight top 3 ranks
-    if (index === 0) row.style.backgroundColor = "#ffd700"; // gold
-    else if (index === 1) row.style.backgroundColor = "#c0c0c0"; // silver
-    else if (index === 2) row.style.backgroundColor = "#cd7f32"; // bronze
+    // Highlight top 3
+    if (index === 0) row.style.backgroundColor = "#ffd700";
+    else if (index === 1) row.style.backgroundColor = "#c0c0c0";
+    else if (index === 2) row.style.backgroundColor = "#cd7f32";
 
     tableBody.appendChild(row);
   });
+}
+
+function highlightChampion(data) {
+  if (data.length === 0) return;
+
+  // Winner is already first after sorting
+  const winner = data[0];
+  const champDiv = document.getElementById("champion-details");
+
+  champDiv.innerHTML = `
+    <strong>${winner["Author"]}</strong><br>
+    ⏱ Execution Time: ${winner["Execution Time (ms)"]} ms<br>
+    💾 Peak Memory: ${winner["Peak Memory (MB)"]} MB<br>
+    🏅 Algorithm: ${winner["Category"]}
+  `;
 }
