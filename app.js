@@ -7,53 +7,54 @@ document.getElementById("uploadBtn").addEventListener("click", () => {
     return;
   }
 
-  const reader = new FileReader();
-  reader.onload = function(e) {
-    const text = e.target.result;
-    displayCSV(text);
-  };
-  reader.readAsText(file);
+  Papa.parse(file, {
+    header: true,   // use first row as header
+    skipEmptyLines: true,
+    complete: function(results) {
+      displayCSV(results.meta.fields, results.data);
+    }
+  });
 });
 
-function displayCSV(csvText) {
-  const rows = csvText.trim().split("\n").map(r => r.split(","));
-
+function displayCSV(headers, data) {
   const tableHead = document.querySelector("#leaderboard thead");
   const tableBody = document.querySelector("#leaderboard tbody");
 
   tableHead.innerHTML = "";
   tableBody.innerHTML = "";
 
-  if (rows.length === 0) {
+  if (data.length === 0) {
     tableBody.innerHTML = "<tr><td colspan='100%'>No data available</td></tr>";
     return;
   }
 
   // Header row
   const headerRow = document.createElement("tr");
-  rows[0].forEach(col => {
+  headers.forEach(col => {
     const th = document.createElement("th");
     th.textContent = col.trim();
     headerRow.appendChild(th);
   });
   tableHead.appendChild(headerRow);
 
-  // Sort rows (by last column, assuming it's score, descending)
-  const dataRows = rows.slice(1);
-  dataRows.sort((a, b) => {
-    const scoreA = parseFloat(a[a.length - 1]) || 0;
-    const scoreB = parseFloat(b[b.length - 1]) || 0;
-    return scoreB - scoreA;
-  });
+  // Sort rows by Execution Time (ascending)
+  data.sort((a, b) => parseFloat(a["Execution Time (ms)"]) - parseFloat(b["Execution Time (ms)"]));
 
   // Data rows
-  dataRows.forEach(rowArr => {
+  data.forEach((rowObj, index) => {
     const row = document.createElement("tr");
-    rowArr.forEach(cell => {
+
+    headers.forEach(col => {
       const td = document.createElement("td");
-      td.textContent = cell.trim();
+      td.textContent = rowObj[col];
       row.appendChild(td);
     });
+
+    // Highlight top 3 ranks
+    if (index === 0) row.style.backgroundColor = "#ffd700"; // gold
+    else if (index === 1) row.style.backgroundColor = "#c0c0c0"; // silver
+    else if (index === 2) row.style.backgroundColor = "#cd7f32"; // bronze
+
     tableBody.appendChild(row);
   });
 }
