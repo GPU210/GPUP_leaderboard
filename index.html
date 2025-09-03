@@ -6,19 +6,34 @@
   <link rel="stylesheet" href="style.css">
 </head>
 <body>
-  <h1>Assignment-2 Leaderboard</h1>
+  <!-- Header section -->
+  <header class="header">
+    <img src="https://upload.wikimedia.org/wikipedia/en/thumb/6/6e/IIT_Hyderabad_Logo.svg/1200px-IIT_Hyderabad_Logo.svg.png" 
+         alt="IITH Logo" class="logo">
+    <div class="header-text">
+      <h1>GPU Programming Course</h1>
+      <h2>Assignment-2 Leaderboard</h2>
+      <p>Instructor: Prof. XYZ</p>
+    </div>
+  </header>
+
+  <hr>
 
   <!-- File upload -->
-  <input type="file" id="fileInput" accept=".csv">
-  <button id="uploadBtn">Upload & Show</button>
+  <section class="upload-section">
+    <input type="file" id="fileInput" accept=".csv">
+    <button id="uploadBtn">Upload & Show</button>
+  </section>
 
   <!-- Table -->
-  <table id="leaderboard">
-    <thead></thead>
-    <tbody></tbody>
-  </table>
+  <section class="table-section">
+    <table id="leaderboard">
+      <thead></thead>
+      <tbody></tbody>
+    </table>
+  </section>
 
-  <!-- PapaParse library for CSV parsing -->
+  <!-- PapaParse for CSV parsing -->
   <script src="https://cdn.jsdelivr.net/npm/papaparse@5.4.1/papaparse.min.js"></script>
   <script src="app.js"></script>
 </body>
