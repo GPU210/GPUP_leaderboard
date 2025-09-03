@@ -24,23 +24,36 @@ function displayCSV(csvText) {
   tableHead.innerHTML = "";
   tableBody.innerHTML = "";
 
-  // Header
+  if (rows.length === 0) {
+    tableBody.innerHTML = "<tr><td colspan='100%'>No data available</td></tr>";
+    return;
+  }
+
+  // Header row
   const headerRow = document.createElement("tr");
   rows[0].forEach(col => {
     const th = document.createElement("th");
-    th.textContent = col;
+    th.textContent = col.trim();
     headerRow.appendChild(th);
   });
   tableHead.appendChild(headerRow);
 
+  // Sort rows (by last column, assuming it's score, descending)
+  const dataRows = rows.slice(1);
+  dataRows.sort((a, b) => {
+    const scoreA = parseFloat(a[a.length - 1]) || 0;
+    const scoreB = parseFloat(b[b.length - 1]) || 0;
+    return scoreB - scoreA;
+  });
+
   // Data rows
-  for (let i = 1; i < rows.length; i++) {
+  dataRows.forEach(rowArr => {
     const row = document.createElement("tr");
-    rows[i].forEach(cell => {
+    rowArr.forEach(cell => {
       const td = document.createElement("td");
-      td.textContent = cell;
+      td.textContent = cell.trim();
       row.appendChild(td);
     });
     tableBody.appendChild(row);
-  }
+  });
 }
