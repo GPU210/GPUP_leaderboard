@@ -10,13 +10,14 @@ body {
   display: flex;
   align-items: center;
   padding: 20px;
-  background: #a2c4f6;
+  background: #d5e5f5;
   color: white;
 }
 
 .logo {
-  width: 120px;   /* increase this to make logo bigger */
-  height: auto;   /* keeps aspect ratio */
+  width: 150px;
+  height: auto;
+  margin-right: 20px;
 }
 
 .header-text h1 {
