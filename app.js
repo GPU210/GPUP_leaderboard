@@ -1,21 +1,27 @@
-document.getElementById("uploadBtn").addEventListener("click", () => {
-  const fileInput = document.getElementById("fileInput");
-  const file = fileInput.files[0];
+// URL of CSV file in GitHub repo (use RAW link)
+const csvUrl = "https://raw.githubusercontent.com/gpu210/GPUP_leaderboard/main/score.csv";
 
-  if (!file) {
-    alert("Please select a CSV file first!");
-    return;
-  }
-
-  Papa.parse(file, {
-    header: true,
-    skipEmptyLines: true,
-    complete: function(results) {
-      displayCSV(results.meta.fields, results.data);
-      highlightChampion(results.data);
-    }
+// Fetch and parse CSV
+fetch(csvUrl)
+  .then(response => {
+    if (!response.ok) throw new Error("Failed to fetch CSV file");
+    return response.text();
+  })
+  .then(csvText => {
+    Papa.parse(csvText, {
+      header: true,
+      skipEmptyLines: true,
+      complete: function(results) {
+        displayCSV(results.meta.fields, results.data);
+        highlightChampion(results.data);
+      }
+    });
+  })
+  .catch(error => {
+    console.error("Error loading CSV:", error);
+    document.querySelector("#leaderboard tbody").innerHTML =
+      "<tr><td colspan='100%'>Failed to load leaderboard</td></tr>";
   });
-});
 
 function displayCSV(headers, data) {
   const tableHead = document.querySelector("#leaderboard thead");
