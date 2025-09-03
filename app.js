@@ -1,38 +1,46 @@
-// Change this to the raw GitHub URL of your CSV file
-const CSV_URL = "https://raw.githubusercontent.com/<your-username>/gpu-leaderboard/main/scores.csv";
+document.getElementById("uploadBtn").addEventListener("click", () => {
+  const fileInput = document.getElementById("fileInput");
+  const file = fileInput.files[0];
 
-function parseCSV(text) {
-  const [header, ...rows] = text.trim().split("\n");
-  const cols = header.split(",");
-  return rows.map(r => {
-    const values = r.split(",");
-    return Object.fromEntries(cols.map((c, i) => [c.trim(), values[i]?.trim()]));
+  if (!file) {
+    alert("Please select a CSV file first!");
+    return;
+  }
+
+  const reader = new FileReader();
+  reader.onload = function(e) {
+    const text = e.target.result;
+    displayCSV(text);
+  };
+  reader.readAsText(file);
+});
+
+function displayCSV(csvText) {
+  const rows = csvText.trim().split("\n").map(r => r.split(","));
+
+  const tableHead = document.querySelector("#leaderboard thead");
+  const tableBody = document.querySelector("#leaderboard tbody");
+
+  tableHead.innerHTML = "";
+  tableBody.innerHTML = "";
+
+  // Header
+  const headerRow = document.createElement("tr");
+  rows[0].forEach(col => {
+    const th = document.createElement("th");
+    th.textContent = col;
+    headerRow.appendChild(th);
   });
+  tableHead.appendChild(headerRow);
+
+  // Data rows
+  for (let i = 1; i < rows.length; i++) {
+    const row = document.createElement("tr");
+    rows[i].forEach(cell => {
+      const td = document.createElement("td");
+      td.textContent = cell;
+      row.appendChild(td);
+    });
+    tableBody.appendChild(row);
+  }
 }
-
-function renderTable(data) {
-  if (!data.length) return "<p>No data available</p>";
-
-  const cols = Object.keys(data[0]);
-  let html = "<table><thead><tr>";
-  cols.forEach(c => html += `<th>${c}</th>`);
-  html += "</tr></thead><tbody>";
-
-  data.forEach(row => {
-    html += "<tr>";
-    cols.forEach(c => html += `<td>${row[c]}</td>`);
-    html += "</tr>";
-  });
-
-  html += "</tbody></table>";
-  return html;
-}
-
-async function loadCSV() {
-  const res = await fetch(CSV_URL);
-  const text = await res.text();
-  const data = parseCSV(text);
-  document.getElementById("leaderboard").innerHTML = renderTable(data);
-}
-
-loadCSV();
