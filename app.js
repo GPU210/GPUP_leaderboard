@@ -39,14 +39,14 @@ function displayCSV(headers, data) {
   });
   tableHead.appendChild(headerRow);
 
-  // Sort by Execution Time (asc), then Memory (asc)
+  // Sort by Execution Time (asc), then Peak Memory (asc)
   data.sort((a, b) => {
     const timeA = parseFloat(a["Execution Time (ms)"]) || Infinity;
     const timeB = parseFloat(b["Execution Time (ms)"]) || Infinity;
     if (timeA !== timeB) return timeA - timeB;
 
-    const memA = parseFloat(a["Peak Memory (MB)"]) || Infinity;
-    const memB = parseFloat(b["Peak Memory (MB)"]) || Infinity;
+    const memA = parseFloat(a["Peak Memory"]) || Infinity;
+    const memB = parseFloat(b["Peak Memory"]) || Infinity;
     return memA - memB;
   });
 
@@ -66,9 +66,9 @@ function displayCSV(headers, data) {
     });
 
     // Highlight top 3
-    if (index === 0) row.style.backgroundColor = "#ffd700";
-    else if (index === 1) row.style.backgroundColor = "#c0c0c0";
-    else if (index === 2) row.style.backgroundColor = "#cd7f32";
+    if (index === 0) row.style.backgroundColor = "#ffd700"; // gold
+    else if (index === 1) row.style.backgroundColor = "#c0c0c0"; // silver
+    else if (index === 2) row.style.backgroundColor = "#cd7f32"; // bronze
 
     tableBody.appendChild(row);
   });
@@ -77,14 +77,13 @@ function displayCSV(headers, data) {
 function highlightChampion(data) {
   if (data.length === 0) return;
 
-  // Winner is already first after sorting
   const winner = data[0];
   const champDiv = document.getElementById("champion-details");
 
   champDiv.innerHTML = `
-    <strong>${winner["Author"]}</strong><br>
+    <strong>${winner["Author"]} (${winner["Roll Number"]})</strong><br>
     ⏱ Execution Time: ${winner["Execution Time (ms)"]} ms<br>
-    💾 Peak Memory: ${winner["Peak Memory (MB)"]} MB<br>
-    🏅 Algorithm: ${winner["Category"]}
+    💾 Peak Memory: ${winner["Peak Memory"]} MB<br>
+    🏅 Algorithm: ${winner["Algorithm"]}
   `;
 }
