@@ -1,4 +1,4 @@
-// CSV file in GitHub repo (raw link)
+// URL of CSV file in GitHub repo (use RAW link)
 const csvUrl = "https://raw.githubusercontent.com/gpu210/GPUP_leaderboard/main/score.csv";
 
 // Fetch and parse CSV
@@ -12,33 +12,70 @@ fetch(csvUrl)
       header: true,
       skipEmptyLines: true,
       complete: function(results) {
-        groupAndDisplay(results.data);
-        highlightChampion(results.data);
+        const headers = results.meta.fields;
+        const data = results.data;
+
+        displayMainTable(headers, data);       // Raw data
+        displayRankings(headers, data);        // Rankings per algorithm
+        highlightChampion(data);               // Champion
       }
     });
   })
   .catch(error => {
     console.error("Error loading CSV:", error);
-    document.getElementById("leaderboard-container").innerHTML =
-      "<p>⚠️ Failed to load leaderboard</p>";
+    document.querySelector("#main-table tbody").innerHTML =
+      "<tr><td colspan='100%'>Failed to load leaderboard</td></tr>";
   });
 
-// Group by Algorithm and display separate tables
-function groupAndDisplay(data) {
-  const container = document.getElementById("leaderboard-container");
-  container.innerHTML = "";
+/* ------------------------
+   MAIN TABLE (RAW DATA)
+-------------------------*/
+function displayMainTable(headers, data) {
+  const tableHead = document.querySelector("#main-table thead");
+  const tableBody = document.querySelector("#main-table tbody");
 
-  // Group rows by algorithm
-  const grouped = {};
+  tableHead.innerHTML = "";
+  tableBody.innerHTML = "";
+
+  // Header row
+  const headerRow = document.createElement("tr");
+  headers.forEach(col => {
+    const th = document.createElement("th");
+    th.textContent = col.trim();
+    headerRow.appendChild(th);
+  });
+  tableHead.appendChild(headerRow);
+
+  // Data rows
+  data.forEach(rowObj => {
+    const row = document.createElement("tr");
+    headers.forEach(col => {
+      const td = document.createElement("td");
+      td.textContent = rowObj[col];
+      row.appendChild(td);
+    });
+    tableBody.appendChild(row);
+  });
+}
+
+/* ------------------------
+   RANKINGS PER ALGORITHM
+-------------------------*/
+function displayRankings(headers, data) {
+  const section = document.getElementById("ranking-section");
+  section.innerHTML = "<h2>📌 Rankings by Algorithm</h2>";
+
+  // Group by Algorithm
+  const algoGroups = {};
   data.forEach(row => {
     const algo = row["Algorithm"] || "Unknown";
-    if (!grouped[algo]) grouped[algo] = [];
-    grouped[algo].push(row);
+    if (!algoGroups[algo]) algoGroups[algo] = [];
+    algoGroups[algo].push(row);
   });
 
-  // Create a table per algorithm
-  for (const algo in grouped) {
-    const algoData = grouped[algo];
+  // Create table for each algorithm
+  for (const algo in algoGroups) {
+    const algoData = [...algoGroups[algo]];
 
     // Sort by Execution Time, then Peak Memory
     algoData.sort((a, b) => {
@@ -51,13 +88,9 @@ function groupAndDisplay(data) {
       return memA - memB;
     });
 
-    // Create section
-    const section = document.createElement("section");
-    section.classList.add("algo-section");
-
-    // Title
-    const title = document.createElement("h2");
-    title.textContent = `⚡ ${algo} Leaderboard`;
+    // Section title
+    const title = document.createElement("h3");
+    title.textContent = `🔹 ${algo} Rankings`;
     section.appendChild(title);
 
     // Table
@@ -65,52 +98,52 @@ function groupAndDisplay(data) {
     const thead = document.createElement("thead");
     const tbody = document.createElement("tbody");
 
-    // Headers (Rank + CSV headers)
+    // Header row with Rank
     const headerRow = document.createElement("tr");
-    ["Rank", "Author", "Roll Number", "Execution Time (ms)", "Peak Memory"].forEach(h => {
+    headerRow.appendChild(Object.assign(document.createElement("th"), { textContent: "Rank" }));
+    headers.forEach(col => {
       const th = document.createElement("th");
-      th.textContent = h;
+      th.textContent = col.trim();
       headerRow.appendChild(th);
     });
     thead.appendChild(headerRow);
 
-    // Rows
-    algoData.forEach((row, index) => {
-      const tr = document.createElement("tr");
+    // Data rows
+    algoData.forEach((rowObj, index) => {
+      const row = document.createElement("tr");
 
-      // Rank
+      // Rank column
       const rankCell = document.createElement("td");
       rankCell.textContent = index + 1;
-      tr.appendChild(rankCell);
+      row.appendChild(rankCell);
 
-      // Columns
-      ["Author", "Roll Number", "Execution Time (ms)", "Peak Memory"].forEach(col => {
+      headers.forEach(col => {
         const td = document.createElement("td");
-        td.textContent = row[col];
-        tr.appendChild(td);
+        td.textContent = rowObj[col];
+        row.appendChild(td);
       });
 
       // Highlight top 3
-      if (index === 0) tr.style.backgroundColor = "#ffd700"; // Gold
-      else if (index === 1) tr.style.backgroundColor = "#c0c0c0"; // Silver
-      else if (index === 2) tr.style.backgroundColor = "#cd7f32"; // Bronze
+      if (index === 0) row.style.backgroundColor = "#ffd700"; // gold
+      else if (index === 1) row.style.backgroundColor = "#c0c0c0"; // silver
+      else if (index === 2) row.style.backgroundColor = "#cd7f32"; // bronze
 
-      tbody.appendChild(tr);
+      tbody.appendChild(row);
     });
 
     table.appendChild(thead);
     table.appendChild(tbody);
     section.appendChild(table);
-
-    container.appendChild(section);
   }
 }
 
-// Highlight global champion across all algorithms
+/* ------------------------
+   CHAMPION (Top overall)
+-------------------------*/
 function highlightChampion(data) {
   if (data.length === 0) return;
 
-  // Sort all data globally
+  // Sort overall (Execution Time + Peak Memory)
   const sorted = [...data].sort((a, b) => {
     const timeA = parseFloat(a["Execution Time (ms)"]) || Infinity;
     const timeB = parseFloat(b["Execution Time (ms)"]) || Infinity;
