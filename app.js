@@ -1,5 +1,5 @@
 // URL of CSV file in GitHub repo (use RAW link)
-const csvUrl = "https://raw.githubusercontent.com/gpu210/GPUP_leaderboard/main/score.csv";
+const csvUrl = "https://raw.githubusercontent.com/gpu210/GPUP_leaderboard/main/score1.csv";
 
 // Fetch and parse CSV
 fetch(csvUrl)
