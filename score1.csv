@@ -1,0 +1,101 @@
+Author,Roll Number,Algorithm,Execution Time (ms),Peak Memory
+Alice Johnson,CS21B001,Radix Sort,10.2,2048
+Bob Smith,CS21B002,Bitonic Sort,12.5,4096
+Charlie Brown,CS21B003,Quick Sort,9.8,3072
+Diana Prince,CS21B004,Merge Sort,11.3,2560
+Edward Norton,CS21B005,Heap Sort,13.7,2048
+Frank Miller,CS21B006,Radix Sort,9.5,2304
+Grace Lee,CS21B007,Bitonic Sort,11.8,3584
+Henry Davis,CS21B008,Quick Sort,10.1,2816
+Isabella Garcia,CS21B009,Merge Sort,12.2,2688
+Jack Wilson,CS21B010,Heap Sort,14.2,2176
+Karen White,CS21B011,Radix Sort,8.9,2432
+Liam Thompson,CS21B012,Bitonic Sort,10.7,4352
+Mason Taylor,CS21B013,Quick Sort,9.2,3200
+Nora Anderson,CS21B014,Merge Sort,10.8,2624
+Oliver Clark,CS21B015,Heap Sort,13.1,2240
+Paula Martinez,CS21B016,Radix Sort,11.7,2368
+Quinn Rodriguez,CS21B017,Bitonic Sort,12.9,3968
+Ryan Lewis,CS21B018,Quick Sort,8.7,3456
+Sophie Hall,CS21B019,Merge Sort,11.9,2752
+Tyler Young,CS21B020,Heap Sort,12.8,2112
+Uma Patel,CS21B021,Radix Sort,9.1,2496
+Victor Kim,CS21B022,Bitonic Sort,13.4,4224
+Wesley Chen,CS21B023,Quick Sort,10.4,3328
+Xara Singh,CS21B024,Merge Sort,12.7,2816
+Yuki Tanaka,CS21B025,Heap Sort,14.8,2368
+Zoe Miller,CS21B026,Radix Sort,10.6,2560
+Adam Jones,CS21B027,Bitonic Sort,11.2,3840
+Beth Cooper,CS21B028,Quick Sort,9.4,3136
+Carl Evans,CS21B029,Merge Sort,13.5,2944
+Damon Scott,CS21B030,Heap Sort,15.2,2304
+Elena Rossi,CS21B031,Radix Sort,8.3,2688
+Felix Wong,CS21B032,Bitonic Sort,12.1,4480
+Gina Torres,CS21B033,Quick Sort,8.9,3264
+Hugo Silva,CS21B034,Merge Sort,11.6,2592
+Iris Murphy,CS21B035,Heap Sort,13.9,2432
+Jason Park,CS21B036,Radix Sort,9.8,2304
+Kara Stone,CS21B037,Bitonic Sort,10.9,3712
+Lucas Reed,CS21B038,Quick Sort,10.8,3584
+Mia Foster,CS21B039,Merge Sort,12.4,2720
+Noah Gray,CS21B040,Heap Sort,14.6,2256
+Olivia Cruz,CS21B041,Matrix Multiplication,15.8,5120
+Peter Liu,CS21B042,Matrix Multiplication,14.2,4864
+Rachel Green,CS21B043,Matrix Multiplication,16.3,5376
+Samuel Lee,CS21B044,Matrix Multiplication,13.7,4736
+Tina Zhang,CS21B045,Matrix Multiplication,15.1,5248
+Ulrich Becker,CS21B046,Matrix Multiplication,14.9,4992
+Vivian Ross,CS21B047,Matrix Multiplication,16.7,5504
+William Hayes,CS21B048,Matrix Multiplication,13.2,4608
+Xander Moore,CS21B049,Matrix Multiplication,15.5,5632
+Yasmin Ali,CS21B050,Matrix Multiplication,14.8,5056
+Zara Johnson,CS21B051,Convolution,18.4,6144
+Aaron Williams,CS21B052,Convolution,19.7,6528
+Bella Thompson,CS21B053,Convolution,17.2,5888
+Connor Davis,CS21B054,Convolution,20.1,6784
+Delilah Martinez,CS21B055,Convolution,18.9,6272
+Ethan Rodriguez,CS21B056,Convolution,17.8,6016
+Fiona Lewis,CS21B057,Convolution,19.3,6400
+Gabriel Hall,CS21B058,Convolution,16.9,5760
+Hannah Young,CS21B059,Convolution,18.6,6336
+Isaac Patel,CS21B060,Convolution,20.8,6656
+Julia Kim,CS21B061,FFT,22.3,7168
+Kevin Chen,CS21B062,FFT,21.7,6912
+Luna Singh,CS21B063,FFT,23.1,7424
+Marcus Tanaka,CS21B064,FFT,20.9,6784
+Nina Miller,CS21B065,FFT,22.8,7296
+Oscar Jones,CS21B066,FFT,21.2,6848
+Penny Cooper,CS21B067,FFT,23.6,7552
+Quentin Evans,CS21B068,FFT,20.5,6720
+Ruby Scott,CS21B069,FFT,22.1,7040
+Sean Rossi,CS21B070,FFT,24.2,7680
+Tara Wong,CS21B071,Reduction,8.7,1536
+Uma Torres,CS21B072,Reduction,9.2,1664
+Victor Silva,CS21B073,Reduction,8.1,1472
+Wendy Murphy,CS21B074,Reduction,9.8,1728
+Xavier Park,CS21B075,Reduction,8.4,1600
+Yara Stone,CS21B076,Reduction,9.5,1696
+Zack Reed,CS21B077,Reduction,7.9,1408
+Aria Foster,CS21B078,Reduction,8.8,1568
+Blake Gray,CS21B079,Reduction,9.1,1632
+Cora Cruz,CS21B080,Reduction,8.6,1504
+David Liu,CS21B081,Scan,11.4,2048
+Emma Green,CS21B082,Scan,12.7,2304
+Finn Lee,CS21B083,Scan,10.8,1920
+Gwen Zhang,CS21B084,Scan,13.2,2432
+Hunter Becker,CS21B085,Scan,11.9,2176
+Ivy Ross,CS21B086,Scan,12.1,2240
+Jasper Hayes,CS21B087,Scan,10.6,1856
+Kiara Moore,CS21B088,Scan,13.8,2496
+Leo Ali,CS21B089,Scan,11.2,2112
+Maya Johnson,CS21B090,Scan,12.4,2368
+Nathan Williams,CS21B091,Histogram,14.6,3072
+Oma Thompson,CS21B092,Histogram,15.3,3328
+Parker Davis,CS21B093,Histogram,13.9,2944
+Quinn Martinez,CS21B094,Histogram,16.1,3456
+Raven Rodriguez,CS21B095,Histogram,14.2,3136
+Sage Lewis,CS21B096,Histogram,15.7,3392
+Titus Hall,CS21B097,Histogram,13.5,2816
+Unity Young,CS21B098,Histogram,15.9,3520
+Vera Patel,CS21B099,Histogram,14.8,3264
+Wren Kim,CS21B100,Histogram,16.4,3584
