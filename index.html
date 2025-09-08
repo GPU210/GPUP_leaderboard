@@ -286,8 +286,19 @@
       });
       tableHead.appendChild(headerRow);
 
-      // Add all records without ranking
-      data.forEach((rowObj) => {
+      // Sort all records by execution time (asc), then by peak memory (asc)
+      const sortedData = [...data].sort((a, b) => {
+        const timeA = parseFloat(a["Execution Time (ms)"]) || Infinity;
+        const timeB = parseFloat(b["Execution Time (ms)"]) || Infinity;
+        if (timeA !== timeB) return timeA - timeB;
+
+        const memA = parseFloat(a["Peak Memory"]) || Infinity;
+        const memB = parseFloat(b["Peak Memory"]) || Infinity;
+        return memA - memB;
+      });
+
+      // Add sorted records
+      sortedData.forEach((rowObj) => {
         const row = document.createElement("tr");
         headers.forEach(col => {
           const td = document.createElement("td");
