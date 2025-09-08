@@ -277,17 +277,44 @@
         return;
       }
 
-      // Create header row (no rank column for all records)
+      // Create header row with rank and remarks columns
       const headerRow = document.createElement("tr");
+      const rankHeader = document.createElement("th");
+      rankHeader.textContent = "Rank";
+      headerRow.appendChild(rankHeader);
+      
       headers.forEach(col => {
         const th = document.createElement("th");
         th.textContent = col.trim();
         headerRow.appendChild(th);
       });
+
+      // Add Remarks column
+      const remarksHeader = document.createElement("th");
+      remarksHeader.textContent = "Remarks";
+      headerRow.appendChild(remarksHeader);
+      
       tableHead.appendChild(headerRow);
 
-      // Sort all records by execution time (asc), then by peak memory (asc)
-      const sortedData = [...data].sort((a, b) => {
+      // Separate successful submissions from error submissions
+      const successfulSubmissions = [];
+      const errorSubmissions = [];
+
+      data.forEach(record => {
+        const executionTime = record["Execution Time (ms)"];
+        const timeValue = parseFloat(executionTime);
+        
+        // If execution time is a valid number, it's successful
+        if (!isNaN(timeValue) && timeValue > 0) {
+          successfulSubmissions.push(record);
+        } else {
+          // Otherwise, it's an error (execution time contains error message)
+          errorSubmissions.push(record);
+        }
+      });
+
+      // Sort successful submissions by execution time (asc), then by peak memory (asc)
+      const sortedSuccessful = successfulSubmissions.sort((a, b) => {
         const timeA = parseFloat(a["Execution Time (ms)"]) || Infinity;
         const timeB = parseFloat(b["Execution Time (ms)"]) || Infinity;
         if (timeA !== timeB) return timeA - timeB;
@@ -297,14 +324,48 @@
         return memA - memB;
       });
 
-      // Add sorted records
-      sortedData.forEach((rowObj) => {
+      // Combine: successful submissions first, then error submissions
+      const allData = [...sortedSuccessful, ...errorSubmissions];
+
+      // Add rows with ranking
+      allData.forEach((rowObj, index) => {
         const row = document.createElement("tr");
+        
+        // Add rank cell (only for successful submissions)
+        const rankCell = document.createElement("td");
+        if (index < successfulSubmissions.length) {
+          rankCell.textContent = index + 1;
+        } else {
+          rankCell.textContent = "-"; // No rank for error submissions
+        }
+        row.appendChild(rankCell);
+
+        // Add data cells
         headers.forEach(col => {
           const td = document.createElement("td");
           td.textContent = rowObj[col] || '';
           row.appendChild(td);
         });
+
+        // Add remarks cell
+        const remarksCell = document.createElement("td");
+        const executionTime = rowObj["Execution Time (ms)"];
+        const timeValue = parseFloat(executionTime);
+        
+        if (!isNaN(timeValue) && timeValue > 0) {
+          remarksCell.textContent = "All test cases passed";
+          remarksCell.style.color = "#27ae60"; // Green color for success
+        } else {
+          remarksCell.textContent = executionTime || "Unknown error";
+          remarksCell.style.color = "#e74c3c"; // Red color for errors
+        }
+        row.appendChild(remarksCell);
+
+        // Apply ranking styles for top 3 successful submissions only
+        if (index === 0 && index < successfulSubmissions.length) row.className = "rank-1";
+        else if (index === 1 && index < successfulSubmissions.length) row.className = "rank-2";
+        else if (index === 2 && index < successfulSubmissions.length) row.className = "rank-3";
+
         tableBody.appendChild(row);
       });
     }
