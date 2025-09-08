@@ -236,7 +236,7 @@
   <script src="https://cdn.jsdelivr.net/npm/papaparse@5.4.1/papaparse.min.js"></script>
   <script>
     // URL of CSV file in GitHub repo (use RAW link)
-    const csvUrl = "https://raw.githubusercontent.com/gpu210/GPUP_leaderboard/main/score1.csv";
+    const csvUrl = "https://raw.githubusercontent.com/gpu210/GPUP_leaderboard/main/score.csv";
 
     // Fetch and parse CSV
     fetch(csvUrl)
@@ -395,35 +395,29 @@
         return;
       }
 
-      // Group data by algorithm and find champion for each
-      const algorithmGroups = {};
-      data.forEach(record => {
-        const algorithm = record["Algorithm"] || "Unknown";
-        if (!algorithmGroups[algorithm]) {
-          algorithmGroups[algorithm] = [];
-        }
-        algorithmGroups[algorithm].push(record);
+      // Sort all data by execution time (asc), then by peak memory (asc) to find overall top performers
+      const sortedData = data.sort((a, b) => {
+        const timeA = parseFloat(a["Execution Time (ms)"]) || Infinity;
+        const timeB = parseFloat(b["Execution Time (ms)"]) || Infinity;
+        if (timeA !== timeB) return timeA - timeB;
+
+        const memA = parseFloat(a["Peak Memory"]) || Infinity;
+        const memB = parseFloat(b["Peak Memory"]) || Infinity;
+        return memA - memB;
       });
 
-      // Find champion for each algorithm
-      Object.keys(algorithmGroups).sort().forEach(algorithm => {
-        const sortedData = algorithmGroups[algorithm].sort((a, b) => {
-          const timeA = parseFloat(a["Execution Time (ms)"]) || Infinity;
-          const timeB = parseFloat(b["Execution Time (ms)"]) || Infinity;
-          if (timeA !== timeB) return timeA - timeB;
+      // Get top 5 overall champions
+      const topFive = sortedData.slice(0, 5);
+      const championTitles = ["🥇 1st Place", "🥈 2nd Place", "🥉 3rd Place", "🏅 4th Place", "🏅 5th Place"];
 
-          const memA = parseFloat(a["Peak Memory"]) || Infinity;
-          const memB = parseFloat(b["Peak Memory"]) || Infinity;
-          return memA - memB;
-        });
-
-        const champion = sortedData[0];
+      topFive.forEach((champion, index) => {
         const championCard = document.createElement("div");
         championCard.className = "champion-card";
         
         championCard.innerHTML = `
-          <h3>🏆 ${algorithm}</h3>
+          <h3>${championTitles[index]}</h3>
           <strong>${champion["Author"]} (${champion["Roll Number"]})</strong><br>
+          🔧 Algorithm: ${champion["Algorithm"]}<br>
           ⏱️ Execution Time: ${champion["Execution Time (ms)"]} ms<br>
           💾 Peak Memory: ${champion["Peak Memory"]} MB
         `;
