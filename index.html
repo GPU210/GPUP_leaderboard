@@ -478,10 +478,9 @@
             
             // Handle remarks column specially
             if (col.toLowerCase() === "remarks") {
-              const urlPattern = /^https?:\/\/.+\.html?$/i;
-              if (urlPattern.test(cellValue)) {
+              if (cellValue && cellValue.includes('.html')) {
                 const link = document.createElement("a");
-                link.href = cellValue;
+                link.href = cellValue.startsWith('http') ? cellValue : baseUrl + cellValue;
                 link.textContent = "View Details";
                 link.target = "_blank";
                 link.style.color = "#27ae60";
