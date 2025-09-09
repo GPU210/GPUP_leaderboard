@@ -239,7 +239,8 @@
     const csvUrl = "https://raw.githubusercontent.com/gpu210/GPUP_leaderboard/main/score1.csv";
     
     // Base URL for relative links (adjust this to match your repository structure)
-    const baseUrl = "https://raw.githubusercontent.com/gpu210/GPUP_leaderboard/main/";
+    // Base URL for HTML/error files (must use GitHub Pages, not raw)
+    const baseUrl = "https://gpu210.github.io/GPUP_leaderboard/";
 
     // Fetch and parse CSV
     fetch(csvUrl)
