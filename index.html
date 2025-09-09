@@ -478,23 +478,18 @@
             
             // Handle remarks column specially
             if (col.toLowerCase() === "remarks") {
-              if (cellValue.toLowerCase() === "all test cases passed" || cellValue === "") {
+              const urlPattern = /^https?:\/\/.+\.html?$/i;
+              if (urlPattern.test(cellValue)) {
+                const link = document.createElement("a");
+                link.href = cellValue;
+                link.textContent = "View Details";
+                link.target = "_blank";
+                link.style.color = "#27ae60";
+                link.style.textDecoration = "underline";
+                td.appendChild(link);
+              } else {
                 td.textContent = "All test cases passed";
                 td.style.color = "#27ae60";
-              } else {
-                const urlPattern = /^https?:\/\/.+/i;
-                if (urlPattern.test(cellValue)) {
-                  const link = document.createElement("a");
-                  link.href = cellValue;
-                  link.textContent = "All test cases passed";
-                  link.target = "_blank";
-                  link.style.color = "#27ae60";
-                  link.style.textDecoration = "underline";
-                  td.appendChild(link);
-                } else {
-                  td.textContent = cellValue || "All test cases passed";
-                  td.style.color = "#27ae60";
-                }
               }
             } else {
               td.textContent = cellValue;
