@@ -356,8 +356,22 @@
           remarksCell.textContent = "All test cases passed";
           remarksCell.style.color = "#27ae60"; // Green color for success
         } else {
-          remarksCell.textContent = executionTime || "Unknown error";
-          remarksCell.style.color = "#e74c3c"; // Red color for errors
+          // Check if the execution time content is a URL
+          const urlPattern = /^https?:\/\/.+/i;
+          if (urlPattern.test(executionTime)) {
+            // Create clickable link
+            const link = document.createElement("a");
+            link.href = executionTime;
+            link.textContent = "View Error Details";
+            link.target = "_blank"; // Open in new tab
+            link.style.color = "#e74c3c"; // Red color for errors
+            link.style.textDecoration = "underline";
+            remarksCell.appendChild(link);
+          } else {
+            // Display as text if it's not a URL
+            remarksCell.textContent = executionTime || "Unknown error";
+            remarksCell.style.color = "#e74c3c"; // Red color for errors
+          }
         }
         row.appendChild(remarksCell);
 
