@@ -237,6 +237,9 @@
   <script>
     // URL of CSV file in GitHub repo (use RAW link)
     const csvUrl = "https://raw.githubusercontent.com/gpu210/GPUP_leaderboard/main/score1.csv";
+    
+    // Base URL for relative links (adjust this to match your repository structure)
+    const baseUrl = "https://raw.githubusercontent.com/gpu210/GPUP_leaderboard/main/";
 
     // Fetch and parse CSV
     fetch(csvUrl)
@@ -264,6 +267,27 @@
         document.querySelector("#champion-details").innerHTML =
           "<div class='error'>Failed to load champions</div>";
       });
+
+    function isValidUrl(str) {
+      // Check if it's a full URL
+      const urlPattern = /^https?:\/\/.+/i;
+      return urlPattern.test(str);
+    }
+
+    function isRelativePath(str) {
+      // Check if it's a relative path that looks like a file
+      return str && (str.includes('/') || str.includes('.html') || str.includes('.htm'));
+    }
+
+    function createLinkElement(href, text, isError = false) {
+      const link = document.createElement("a");
+      link.href = href;
+      link.textContent = text;
+      link.target = "_blank";
+      link.style.color = isError ? "#e74c3c" : "#27ae60";
+      link.style.textDecoration = "underline";
+      return link;
+    }
 
     function displayAllRecords(headers, data) {
       const tableHead = document.querySelector("#all-records thead");
@@ -346,36 +370,33 @@
             const timeValue = parseFloat(executionTime);
             
             if (!isNaN(timeValue) && timeValue > 0) {
-              // Successful submission - check if remarks contains link or text
+              // Successful submission
               if (cellValue.toLowerCase() === "all test cases passed" || cellValue === "") {
                 td.textContent = "All test cases passed";
                 td.style.color = "#27ae60"; // Green color for success
+              } else if (isValidUrl(cellValue)) {
+                // Full URL
+                const link = createLinkElement(cellValue, "All test cases passed", false);
+                td.appendChild(link);
+              } else if (isRelativePath(cellValue)) {
+                // Relative path - make it a clickable link
+                const fullUrl = baseUrl + cellValue;
+                const link = createLinkElement(fullUrl, "All test cases passed", false);
+                td.appendChild(link);
               } else {
-                // Check if the remarks content is a URL
-                const urlPattern = /^https?:\/\/.+/i;
-                if (urlPattern.test(cellValue)) {
-                  const link = document.createElement("a");
-                  link.href = cellValue;
-                  link.textContent = "All test cases passed";
-                  link.target = "_blank";
-                  link.style.color = "#27ae60";
-                  link.style.textDecoration = "underline";
-                  td.appendChild(link);
-                } else {
-                  td.textContent = cellValue || "All test cases passed";
-                  td.style.color = "#27ae60";
-                }
+                td.textContent = cellValue || "All test cases passed";
+                td.style.color = "#27ae60";
               }
             } else {
-              // Error submission - remarks should contain link or error message
-              const urlPattern = /^https?:\/\/.+/i;
-              if (urlPattern.test(cellValue)) {
-                const link = document.createElement("a");
-                link.href = cellValue;
-                link.textContent = "View Error Details";
-                link.target = "_blank";
-                link.style.color = "#e74c3c";
-                link.style.textDecoration = "underline";
+              // Error submission
+              if (isValidUrl(cellValue)) {
+                // Full URL
+                const link = createLinkElement(cellValue, "View Error Details", true);
+                td.appendChild(link);
+              } else if (isRelativePath(cellValue)) {
+                // Relative path - make it a clickable link
+                const fullUrl = baseUrl + cellValue;
+                const link = createLinkElement(fullUrl, "View Error Details", true);
                 td.appendChild(link);
               } else {
                 td.textContent = cellValue || "Error occurred";
@@ -478,16 +499,20 @@
             
             // Handle remarks column specially
             if (col.toLowerCase() === "remarks") {
-              if (cellValue && cellValue.includes('.html')) {
-                const link = document.createElement("a");
-                link.href = cellValue.startsWith('http') ? cellValue : baseUrl + cellValue;
-                link.textContent = "View Details";
-                link.target = "_blank";
-                link.style.color = "#27ae60";
-                link.style.textDecoration = "underline";
+              if (cellValue === "" || cellValue.toLowerCase() === "all test cases passed") {
+                td.textContent = "All test cases passed";
+                td.style.color = "#27ae60";
+              } else if (isValidUrl(cellValue)) {
+                // Full URL
+                const link = createLinkElement(cellValue, "View Details", false);
+                td.appendChild(link);
+              } else if (isRelativePath(cellValue)) {
+                // Relative path - make it a clickable link
+                const fullUrl = baseUrl + cellValue;
+                const link = createLinkElement(fullUrl, "View Details", false);
                 td.appendChild(link);
               } else {
-                td.textContent = "All test cases passed";
+                td.textContent = cellValue;
                 td.style.color = "#27ae60";
               }
             } else {
