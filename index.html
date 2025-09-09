@@ -277,7 +277,7 @@
         return;
       }
 
-      // Create header row with rank and remarks columns
+      // Create header row with rank column
       const headerRow = document.createElement("tr");
       const rankHeader = document.createElement("th");
       rankHeader.textContent = "Rank";
@@ -288,11 +288,6 @@
         th.textContent = col.trim();
         headerRow.appendChild(th);
       });
-
-      // Add Remarks column
-      const remarksHeader = document.createElement("th");
-      remarksHeader.textContent = "Remarks";
-      headerRow.appendChild(remarksHeader);
       
       tableHead.appendChild(headerRow);
 
@@ -301,26 +296,26 @@
       const errorSubmissions = [];
 
       data.forEach(record => {
-        const executionTime = record["Execution Time (ms)"];
+        const executionTime = record["exec_time(ms)"] || record["exec_time"];
         const timeValue = parseFloat(executionTime);
         
         // If execution time is a valid number, it's successful
         if (!isNaN(timeValue) && timeValue > 0) {
           successfulSubmissions.push(record);
         } else {
-          // Otherwise, it's an error (execution time contains error message)
+          // Otherwise, it's an error
           errorSubmissions.push(record);
         }
       });
 
       // Sort successful submissions by execution time (asc), then by peak memory (asc)
       const sortedSuccessful = successfulSubmissions.sort((a, b) => {
-        const timeA = parseFloat(a["Execution Time (ms)"]) || Infinity;
-        const timeB = parseFloat(b["Execution Time (ms)"]) || Infinity;
+        const timeA = parseFloat(a["exec_time(ms)"] || a["exec_time"]) || Infinity;
+        const timeB = parseFloat(b["exec_time(ms)"] || b["exec_time"]) || Infinity;
         if (timeA !== timeB) return timeA - timeB;
 
-        const memA = parseFloat(a["Peak Memory"]) || Infinity;
-        const memB = parseFloat(b["Peak Memory"]) || Infinity;
+        const memA = parseFloat(a["peak_memory(KB)"] || a["peak_memory"]) || Infinity;
+        const memB = parseFloat(b["peak_memory(KB)"] || b["peak_memory"]) || Infinity;
         return memA - memB;
       });
 
@@ -343,37 +338,56 @@
         // Add data cells
         headers.forEach(col => {
           const td = document.createElement("td");
-          td.textContent = rowObj[col] || '';
+          const cellValue = rowObj[col] || '';
+          
+          // Handle remarks column specially
+          if (col.toLowerCase() === "remarks") {
+            const executionTime = rowObj["exec_time(ms)"] || rowObj["exec_time"];
+            const timeValue = parseFloat(executionTime);
+            
+            if (!isNaN(timeValue) && timeValue > 0) {
+              // Successful submission - check if remarks contains link or text
+              if (cellValue.toLowerCase() === "all test cases passed" || cellValue === "") {
+                td.textContent = "All test cases passed";
+                td.style.color = "#27ae60"; // Green color for success
+              } else {
+                // Check if the remarks content is a URL
+                const urlPattern = /^https?:\/\/.+/i;
+                if (urlPattern.test(cellValue)) {
+                  const link = document.createElement("a");
+                  link.href = cellValue;
+                  link.textContent = "All test cases passed";
+                  link.target = "_blank";
+                  link.style.color = "#27ae60";
+                  link.style.textDecoration = "underline";
+                  td.appendChild(link);
+                } else {
+                  td.textContent = cellValue || "All test cases passed";
+                  td.style.color = "#27ae60";
+                }
+              }
+            } else {
+              // Error submission - remarks should contain link or error message
+              const urlPattern = /^https?:\/\/.+/i;
+              if (urlPattern.test(cellValue)) {
+                const link = document.createElement("a");
+                link.href = cellValue;
+                link.textContent = "View Error Details";
+                link.target = "_blank";
+                link.style.color = "#e74c3c";
+                link.style.textDecoration = "underline";
+                td.appendChild(link);
+              } else {
+                td.textContent = cellValue || "Error occurred";
+                td.style.color = "#e74c3c";
+              }
+            }
+          } else {
+            td.textContent = cellValue;
+          }
+          
           row.appendChild(td);
         });
-
-        // Add remarks cell
-        const remarksCell = document.createElement("td");
-        const executionTime = rowObj["Execution Time (ms)"];
-        const timeValue = parseFloat(executionTime);
-        
-        if (!isNaN(timeValue) && timeValue > 0) {
-          remarksCell.textContent = "All test cases passed";
-          remarksCell.style.color = "#27ae60"; // Green color for success
-        } else {
-          // Check if the execution time content is a URL
-          const urlPattern = /^https?:\/\/.+/i;
-          if (urlPattern.test(executionTime)) {
-            // Create clickable link
-            const link = document.createElement("a");
-            link.href = executionTime;
-            link.textContent = "View Error Details";
-            link.target = "_blank"; // Open in new tab
-            link.style.color = "#e74c3c"; // Red color for errors
-            link.style.textDecoration = "underline";
-            remarksCell.appendChild(link);
-          } else {
-            // Display as text if it's not a URL
-            remarksCell.textContent = executionTime || "Unknown error";
-            remarksCell.style.color = "#e74c3c"; // Red color for errors
-          }
-        }
-        row.appendChild(remarksCell);
 
         // Apply ranking styles for top 3 successful submissions only
         if (index === 0 && index < successfulSubmissions.length) row.className = "rank-1";
@@ -393,10 +407,17 @@
         return;
       }
 
-      // Group data by algorithm
+      // Filter out error submissions for algorithm leaderboards
+      const successfulData = data.filter(record => {
+        const executionTime = record["exec_time(ms)"] || record["exec_time"];
+        const timeValue = parseFloat(executionTime);
+        return !isNaN(timeValue) && timeValue > 0;
+      });
+
+      // Group successful data by algorithm
       const algorithmGroups = {};
-      data.forEach(record => {
-        const algorithm = record["Algorithm"] || "Unknown";
+      successfulData.forEach(record => {
+        const algorithm = record["algorithm"] || "Unknown";
         if (!algorithmGroups[algorithm]) {
           algorithmGroups[algorithm] = [];
         }
@@ -432,12 +453,12 @@
 
         // Sort algorithm data by execution time (asc), then by peak memory (asc)
         const sortedData = algorithmGroups[algorithm].sort((a, b) => {
-          const timeA = parseFloat(a["Execution Time (ms)"]) || Infinity;
-          const timeB = parseFloat(b["Execution Time (ms)"]) || Infinity;
+          const timeA = parseFloat(a["exec_time(ms)"] || a["exec_time"]) || Infinity;
+          const timeB = parseFloat(b["exec_time(ms)"] || b["exec_time"]) || Infinity;
           if (timeA !== timeB) return timeA - timeB;
 
-          const memA = parseFloat(a["Peak Memory"]) || Infinity;
-          const memB = parseFloat(b["Peak Memory"]) || Infinity;
+          const memA = parseFloat(a["peak_memory(KB)"] || a["peak_memory"]) || Infinity;
+          const memB = parseFloat(b["peak_memory(KB)"] || b["peak_memory"]) || Infinity;
           return memA - memB;
         });
 
@@ -453,7 +474,32 @@
           // Add data cells
           headers.forEach(col => {
             const td = document.createElement("td");
-            td.textContent = rowObj[col] || '';
+            const cellValue = rowObj[col] || '';
+            
+            // Handle remarks column specially
+            if (col.toLowerCase() === "remarks") {
+              if (cellValue.toLowerCase() === "all test cases passed" || cellValue === "") {
+                td.textContent = "All test cases passed";
+                td.style.color = "#27ae60";
+              } else {
+                const urlPattern = /^https?:\/\/.+/i;
+                if (urlPattern.test(cellValue)) {
+                  const link = document.createElement("a");
+                  link.href = cellValue;
+                  link.textContent = "All test cases passed";
+                  link.target = "_blank";
+                  link.style.color = "#27ae60";
+                  link.style.textDecoration = "underline";
+                  td.appendChild(link);
+                } else {
+                  td.textContent = cellValue || "All test cases passed";
+                  td.style.color = "#27ae60";
+                }
+              }
+            } else {
+              td.textContent = cellValue;
+            }
+            
             row.appendChild(td);
           });
 
@@ -481,31 +527,43 @@
         return;
       }
 
-      // Sort all data by execution time (asc), then by peak memory (asc) to find overall top performers
-      const sortedData = data.sort((a, b) => {
-        const timeA = parseFloat(a["Execution Time (ms)"]) || Infinity;
-        const timeB = parseFloat(b["Execution Time (ms)"]) || Infinity;
+      // Filter successful submissions only for champions
+      const successfulData = data.filter(record => {
+        const executionTime = record["exec_time(ms)"] || record["exec_time"];
+        const timeValue = parseFloat(executionTime);
+        return !isNaN(timeValue) && timeValue > 0;
+      });
+
+      if (successfulData.length === 0) {
+        champDiv.innerHTML = "<div class='error'>No successful submissions found</div>";
+        return;
+      }
+
+      // Sort successful data by execution time (asc), then by peak memory (asc)
+      const sortedData = successfulData.sort((a, b) => {
+        const timeA = parseFloat(a["exec_time(ms)"] || a["exec_time"]) || Infinity;
+        const timeB = parseFloat(b["exec_time(ms)"] || b["exec_time"]) || Infinity;
         if (timeA !== timeB) return timeA - timeB;
 
-        const memA = parseFloat(a["Peak Memory"]) || Infinity;
-        const memB = parseFloat(b["Peak Memory"]) || Infinity;
+        const memA = parseFloat(a["peak_memory(KB)"] || a["peak_memory"]) || Infinity;
+        const memB = parseFloat(b["peak_memory(KB)"] || b["peak_memory"]) || Infinity;
         return memA - memB;
       });
 
-      // Get top 5 overall champions
-      const topFive = sortedData.slice(0, 3);
+      // Get top 3 overall champions
+      const topThree = sortedData.slice(0, 3);
       const championTitles = ["🥇 1st Place", "🥈 2nd Place", "🥉 3rd Place"];
 
-      topFive.forEach((champion, index) => {
+      topThree.forEach((champion, index) => {
         const championCard = document.createElement("div");
         championCard.className = "champion-card";
         
         championCard.innerHTML = `
           <h3>${championTitles[index]}</h3>
-          <strong>${champion["Author"]} (${champion["Roll Number"]})</strong><br>
-          🔧 Algorithm: ${champion["Algorithm"]}<br>
-          ⏱️ Execution Time: ${champion["Execution Time (ms)"]} ms<br>
-          💾 Peak Memory: ${champion["Peak Memory"]} MB
+          <strong>${champion["name"]} (${champion["roll_number"]})</strong><br>
+          🔧 Algorithm: ${champion["algorithm"]}<br>
+          ⏱️ Execution Time: ${champion["exec_time(ms)"] || champion["exec_time"]} ms<br>
+          💾 Peak Memory: ${champion["peak_memory(KB)"] || champion["peak_memory"]} KB
         `;
 
         champDiv.appendChild(championCard);
