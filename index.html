@@ -583,7 +583,8 @@
           <strong>${champion["name"]} (${champion["roll_number"]})</strong><br>
           🔧 Algorithm: ${champion["algorithm"]}<br>
           ⏱️ Execution Time: ${champion["exec_time(ms)"] || champion["exec_time"]} ms<br>
-          💾 Peak Memory: ${champion["peak_memory(KB)"] || champion["peak_memory"]} KB
+          💾 Peak Memory: ${champion["peak_memory(KB)"] || champion["peak_memory"]} KB<br>
+           📅 Submitted At: ${champion["timestamp"] || "N/A"}
         `;
 
         champDiv.appendChild(championCard);
