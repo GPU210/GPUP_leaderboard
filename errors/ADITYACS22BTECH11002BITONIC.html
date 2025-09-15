@@ -1,0 +1,318 @@
+<h2>Compilation Error</h2><pre>
+main.cu(25): warning #1835-D: attribute "__global__" does not apply here
+  __attribute__((global)) void bitonic_sort(
+                 ^
+
+Remark: The warnings can be suppressed with "-diag-suppress <warning-number>"
+
+main.cu(25): error: incomplete type "void" is not allowed
+  __attribute__((global)) void bitonic_sort(
+                               ^
+
+main.cu(26): error: identifier "uint32_t" is undefined
+      uint32_t* arrays,
+      ^
+
+main.cu(26): error: identifier "arrays" is undefined
+      uint32_t* arrays,
+                ^
+
+main.cu(27): error: expected an expression
+      const uint32_t* cum,
+      ^
+
+main.cu(28): error: type name is not allowed
+      int num_rows)
+      ^
+
+main.cu(28): error: expected a ")"
+      int num_rows)
+          ^
+
+main.cu(29): error: expected a ";"
+  {
+  ^
+
+main.cu(50): warning #12-D: parsing restarts here after previous syntax error
+                          bool dir = ((rel & size) == 0);
+                                                        ^
+
+main.cu(52): error: expected a declaration
+                          if ((a > b) == dir) {
+                          ^
+
+main.cu(57): warning #12-D: parsing restarts here after previous syntax error
+                          arrays[start + rel] = a;
+                                                 ^
+
+main.cu(58): error: "arrays" is not a type name
+                          arrays[start + partner] = b;
+                          ^
+
+main.cu(58): error: invalid specifier for structured binding declaration
+                          arrays[start + partner] = b;
+                          ^
+
+main.cu(58): error: expected a "]"
+                          arrays[start + partner] = b;
+                                       ^
+
+main.cu(58): error: identifier "b" is undefined
+                          arrays[start + partner] = b;
+                                                    ^
+
+main.cu(59): error: expected a declaration
+                      }
+                      ^
+
+main.cu(107): warning #12-D: parsing restarts here after previous syntax error
+                  len = std::atoi(token);
+                                        ^
+
+main.cu(108): error: this declaration has no storage class or type specifier
+                  padded_len = nextPow2(len);
+                  ^
+
+main.cu(108): error: identifier "len" is undefined
+                  padded_len = nextPow2(len);
+                                        ^
+
+main.cu(109): error: identifier "lengths_padded" is undefined
+                  lengths_padded[row+1] = lengths_padded[row]+padded_len;
+                  ^
+
+main.cu(109): error: invalid specifier for structured binding declaration
+                  lengths_padded[row+1] = lengths_padded[row]+padded_len;
+                  ^
+
+main.cu(109): error: expected a "]"
+                  lengths_padded[row+1] = lengths_padded[row]+padded_len;
+                                    ^
+
+main.cu(109): error: identifier "lengths_padded" is undefined
+                  lengths_padded[row+1] = lengths_padded[row]+padded_len;
+                                          ^
+
+main.cu(109): error: a variable declared with an auto type specifier cannot appear in its own initializer
+                  lengths_padded[row+1] = lengths_padded[row]+padded_len;
+                                                         ^
+
+main.cu(110): error: identifier "lengths" is undefined
+                  lengths[row+1] = lengths[row]+len;
+                  ^
+
+main.cu(110): error: invalid specifier for structured binding declaration
+                  lengths[row+1] = lengths[row]+len;
+                  ^
+
+main.cu(110): error: declaration is incompatible with structured binding "row" (declared at line 109)
+                  lengths[row+1] = lengths[row]+len;
+                          ^
+
+main.cu(110): error: expected a "]"
+                  lengths[row+1] = lengths[row]+len;
+                             ^
+
+main.cu(110): error: identifier "lengths" is undefined
+                  lengths[row+1] = lengths[row]+len;
+                                   ^
+
+main.cu(110): error: a variable declared with an auto type specifier cannot appear in its own initializer
+                  lengths[row+1] = lengths[row]+len;
+                                           ^
+
+main.cu(111): error: this declaration has no storage class or type specifier
+                  max_len = std::max(padded_len,max_len);
+                  ^
+
+main.cu(112): error: expected a declaration
+              } else if (col <= len) {
+              ^
+
+main.cu(115): warning #12-D: parsing restarts here after previous syntax error
+              col++;
+                   ^
+
+main.cu(116): error: this declaration has no storage class or type specifier
+              token = strtok(nullptr, ",");
+              ^
+
+main.cu(116): error: a value of type "char *" cannot be used to initialize an entity of type "int"
+              token = strtok(nullptr, ",");
+                      ^
+
+main.cu(117): error: expected a declaration
+          }
+          ^
+
+main.cu(123): warning #12-D: parsing restarts here after previous syntax error
+          row++;
+               ^
+
+main.cu(124): error: expected a declaration
+      }
+      ^
+
+main.cu(127): error: expected a declaration
+  }
+  ^
+
+main.cu(173): warning #12-D: parsing restarts here after previous syntax error
+      uint32_t* sequences = (uint32_t*) malloc(Nmax * LMax * sizeof(uint32_t));
+                                                                              ^
+
+main.cu(174): error: "uint32_t" is not a type name
+      uint32_t* lengths_padded = (uint32_t*) malloc((Nmax+1) * sizeof(uint32_t));
+      ^
+
+main.cu(174): error: expected an expression
+      uint32_t* lengths_padded = (uint32_t*) malloc((Nmax+1) * sizeof(uint32_t));
+                                           ^
+
+main.cu(174): error: expected a ";"
+      uint32_t* lengths_padded = (uint32_t*) malloc((Nmax+1) * sizeof(uint32_t));
+                                             ^
+
+main.cu(175): error: "uint32_t" is not a type name
+      uint32_t* lengths = (uint32_t*) malloc((Nmax+1) * sizeof(uint32_t));
+      ^
+
+main.cu(175): error: expected an expression
+      uint32_t* lengths = (uint32_t*) malloc((Nmax+1) * sizeof(uint32_t));
+                                    ^
+
+main.cu(175): error: expected a ";"
+      uint32_t* lengths = (uint32_t*) malloc((Nmax+1) * sizeof(uint32_t));
+                                      ^
+
+main.cu(177): error: identifier "input_file" is undefined
+      std::pair<int,int> input_dim = parse_csv(input_file,sequences,lengths_padded,lengths);
+                                               ^
+
+main.cu(177): error: identifier "sequences" is undefined
+      std::pair<int,int> input_dim = parse_csv(input_file,sequences,lengths_padded,lengths);
+                                                          ^
+
+main.cu(177): error: identifier "parse_csv" is undefined
+      std::pair<int,int> input_dim = parse_csv(input_file,sequences,lengths_padded,lengths);
+                                     ^
+
+main.cu(181): error: expected a declaration
+      if constexpr (VERIFY)
+      ^
+
+main.cu(188): warning #12-D: parsing restarts here after previous syntax error
+      uint32_t* d_sequences;
+                           ^
+
+main.cu(189): error: "uint32_t" is not a type name
+      uint32_t* d_lenghts;
+      ^
+
+main.cu(190): error: this declaration has no storage class or type specifier
+      cudaMalloc((void**)&d_sequences,N * ActualLMax * sizeof(uint32_t));
+      ^
+
+main.cu(190): error: declaration is incompatible with overloaded function "cudaMalloc" (declared at line 868 of /usr/local/cuda/bin/../targets/x86_64-linux/include/cuda_device_runtime_api.h)
+      cudaMalloc((void**)&d_sequences,N * ActualLMax * sizeof(uint32_t));
+      ^
+
+main.cu(190): error: identifier "d_sequences" is undefined
+      cudaMalloc((void**)&d_sequences,N * ActualLMax * sizeof(uint32_t));
+                          ^
+
+main.cu(190): error: too many initializer values
+      cudaMalloc((void**)&d_sequences,N * ActualLMax * sizeof(uint32_t));
+                                      ^
+
+main.cu(191): error: this declaration has no storage class or type specifier
+      cudaMalloc((void**)&d_lenghts,(N+1)*sizeof(uint32_t));
+      ^
+
+main.cu(191): error: variable "cudaMalloc" has already been defined (previous definition at line 190)
+      cudaMalloc((void**)&d_lenghts,(N+1)*sizeof(uint32_t));
+      ^
+
+main.cu(191): error: too many initializer values
+      cudaMalloc((void**)&d_lenghts,(N+1)*sizeof(uint32_t));
+                                    ^
+
+main.cu(194): error: "uint32_t" is not a type name
+      uint32_t* result = (uint32_t*) malloc(N * ActualLMax * sizeof(uint32_t));
+      ^
+
+main.cu(194): error: expected an expression
+      uint32_t* result = (uint32_t*) malloc(N * ActualLMax * sizeof(uint32_t));
+                                   ^
+
+main.cu(194): error: expected a ";"
+      uint32_t* result = (uint32_t*) malloc(N * ActualLMax * sizeof(uint32_t));
+                                     ^
+
+main.cu(196): error: this declaration has no storage class or type specifier
+      cudaMemcpy(d_sequences,sequences,N * ActualLMax * sizeof(uint32_t),cudaMemcpyHostToDevice);
+      ^
+
+main.cu(196): error: declaration is incompatible with "cudaError_t cudaMemcpy(void *, const void *, size_t, cudaMemcpyKind)" (declared at line 6851 of /usr/local/cuda/bin/../targets/x86_64-linux/include/cuda_runtime_api.h)
+      cudaMemcpy(d_sequences,sequences,N * ActualLMax * sizeof(uint32_t),cudaMemcpyHostToDevice);
+      ^
+
+main.cu(196): error: too many initializer values
+      cudaMemcpy(d_sequences,sequences,N * ActualLMax * sizeof(uint32_t),cudaMemcpyHostToDevice);
+                             ^
+
+main.cu(197): error: this declaration has no storage class or type specifier
+      cudaMemcpy(d_lenghts,lengths_padded,(N+1)*sizeof(uint32_t),cudaMemcpyHostToDevice);
+      ^
+
+main.cu(197): error: variable "cudaMemcpy" has already been defined (previous definition at line 196)
+      cudaMemcpy(d_lenghts,lengths_padded,(N+1)*sizeof(uint32_t),cudaMemcpyHostToDevice);
+      ^
+
+main.cu(197): error: too many initializer values
+      cudaMemcpy(d_lenghts,lengths_padded,(N+1)*sizeof(uint32_t),cudaMemcpyHostToDevice);
+                           ^
+
+main.cu(203): error: this declaration has no storage class or type specifier
+      bitonic_sort<<<grid,block>>>(d_sequences,d_lenghts,N);
+      ^
+
+main.cu(203): error: variable "bitonic_sort" has already been defined (previous definition at line 25)
+      bitonic_sort<<<grid,block>>>(d_sequences,d_lenghts,N);
+      ^
+
+main.cu(203): error: expected a ";"
+      bitonic_sort<<<grid,block>>>(d_sequences,d_lenghts,N);
+                  ^
+
+main.cu(204): error: this declaration has no storage class or type specifier
+      cudaMemcpy(result,d_sequences,N * ActualLMax * sizeof(uint32_t),cudaMemcpyDeviceToHost);
+      ^
+
+main.cu(204): error: variable "cudaMemcpy" has already been defined (previous definition at line 196)
+      cudaMemcpy(result,d_sequences,N * ActualLMax * sizeof(uint32_t),cudaMemcpyDeviceToHost);
+      ^
+
+main.cu(204): error: too many initializer values
+      cudaMemcpy(result,d_sequences,N * ActualLMax * sizeof(uint32_t),cudaMemcpyDeviceToHost);
+                        ^
+
+main.cu(206): error: this declaration has no storage class or type specifier
+      write_to_csv(output_file,result,lengths_padded,lengths,N);
+      ^
+
+main.cu(206): error: identifier "output_file" is undefined
+      write_to_csv(output_file,result,lengths_padded,lengths,N);
+                   ^
+
+main.cu(206): error: too many initializer values
+      write_to_csv(output_file,result,lengths_padded,lengths,N);
+                               ^
+
+main.cu(208): error: expected a declaration
+  }
+  ^
+
+70 errors detected in the compilation of "main.cu".
+
+</pre>
