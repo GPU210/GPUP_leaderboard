@@ -1,9 +1,23 @@
-<h2>ZAKI CS25MTECH11021 RADIX - Benchmark Results</h2>
-<table border='1'><tr><th>Test Case</th><th>Execution Time (ms)</th><th>Peak Memory (KB)</th></tr>
-<tr><td>input_1.csv</td><td>4718.2369</td><td>0</td></tr>
-<tr><td>input_2.csv</td><td>4708.8194</td><td>0</td></tr>
-<tr><td>input_3.csv</td><td>4737.8325</td><td>0</td></tr>
-<tr><td>input_4.csv</td><td>4723.7183</td><td>0</td></tr>
-<tr><td>input_5.csv</td><td>4458.4641</td><td>0</td></tr>
+<h2>ZAKI CS25MTECH11021 RADIX - CPU-Only Implementation (NOT ACCEPTABLE)</h2>
+<div style='color: red; font-weight: bold; font-size: 16px;'>⚠️ ERROR: This implementation does not use GPU acceleration!</div>
+<h3>Issues Found:</h3>
+<ul>
+<li><strong>No CUDA kernel launches detected</strong> - The program runs entirely on CPU</li>
+<li><strong>No GPU memory allocations</strong> - No cudaMalloc() or similar calls found</li>
+<li><strong>No GPU memory transfers</strong> - No cudaMemcpy() operations detected</li>
+</ul>
+<h3>Requirements:</h3>
+<ul>
+<li>The algorithm must be implemented using CUDA GPU programming</li>
+<li>Must include GPU kernel launches using <<<blocks, threads>>> syntax</li>
+<li>Must use GPU memory allocation (cudaMalloc) and data transfer (cudaMemcpy)</li>
+</ul>
+<h3>Test Results (CPU Execution Times):</h3>
+<table border='1' style='border-collapse: collapse;'>
+<tr style='background-color: #f0f0f0;'><th>Test Case</th><th>CPU Time (ms)</th><th>GPU Memory Status</th></tr>
+<tr><td>input_1.csv</td><td>4521.8140</td><td style='color: red; font-weight: bold;'>CPU_ONLY</td></tr>
+<tr><td>input_2.csv</td><td>4515.8174</td><td style='color: red; font-weight: bold;'>CPU_ONLY</td></tr>
+<tr><td>input_3.csv</td><td>4520.0308</td><td style='color: red; font-weight: bold;'>CPU_ONLY</td></tr>
+<tr><td>input_4.csv</td><td>4519.6244</td><td style='color: red; font-weight: bold;'>CPU_ONLY</td></tr>
+<tr><td>input_5.csv</td><td>4275.0487</td><td style='color: red; font-weight: bold;'>CPU_ONLY</td></tr>
 </table>
-<p><b>All Tests Passed</b></p>
